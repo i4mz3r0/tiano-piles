@@ -66,7 +66,7 @@ const update = () => {
     if(!game.started) return
     if(glowAnim.enabled){
         if(glowAnim.step <= 10){
-            bgGrad(glowAnim.color, 100 - glowAnim.step)
+           bgGrad(glowAnim.color, 100 - glowAnim.step)
             glowAnim.step += 1
         }
         else if(glowAnim.step <= 20){
@@ -80,7 +80,7 @@ const update = () => {
     }
     let toDel = []
     for(const i in game.notes){
-        if(game.notes[i][1]>80&&game.notes[i][1]<90){
+        if(game.notes[i][1]>70&&game.notes[i][1]<80){
 		 	j=game.notes[i][0]
 			d=game.notes[i][1]
 		}
