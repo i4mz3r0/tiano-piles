@@ -8,7 +8,7 @@ const icons = {}
 const requestFullScreen = document.documentElement.webkitRequestFullScreen || document.documentElement.mozRequestFullScreen
 const cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen
 
-let wh
+let wh, possible,j,d
 
 const resize = () => {
     canvas.width = window.innerWidth * pr
@@ -34,23 +34,24 @@ fullscreenBtn.addEventListener("click", () => {
 ham.get("swipe").set({direction: Hammer.DIRECTION_ALL})
 ham.get("pinch").set({enable: true})
 
-ham.on("swipeleft swiperight swipeup swipedown pinchin pinchout tap", e => {
-    if(!game.started){
-        game.started = true
-        return
-    }
-    if(e.type == "tap"){
-        glowAnim.color = "#ff5f5f"
-        glowAnim.step = 0
-        glowAnim.enabled = true
-    }
-    else if(e.type.substr(0, 5) == "swipe"){
-        glowAnim.color = "#83ffe6"
-        glowAnim.step = 0
-        glowAnim.enabled = true
-    }
-})
-
+ham.on("swipeleft swiperight swipeup swipedown tap", e => {
+    			if(!game.started){
+        			game.started = true
+        			return
+    			}
+				if((e.type==j||e.type == "swipe"+j)&&j!=false){
+       				glowAnim.color = "#83ffe6"
+    				glowAnim.step = 0
+    		   		glowAnim.enabled = true
+					j=false
+    			}
+				else{
+					glowAnim.color = "#ff5f5f"
+       				glowAnim.step = 0
+       				glowAnim.enabled = true
+					console.log("wrong swipe at "+d)
+				}
+			})
 const bgGrad = (color, percent) => {
     canvas.style.background = `linear-gradient(#2c2c2c ${percent}%, ${color})`
 }
@@ -79,8 +80,12 @@ const update = () => {
     }
     let toDel = []
     for(const i in game.notes){
-        if(game.notes[i][1] == 100) toDel += i
-        else game.notes[i][1] += 0.5
+        if(game.notes[i][1]>80&&game.notes[i][1]<90){
+		 	j=game.notes[i][0]
+			d=game.notes[i][1]
+		}
+		if(game.notes[i][1] >= 100) toDel += i
+        else {game.notes[i][1] += 0.5}
     }
     for(const i of toDel){
         delete game.notes[i]
@@ -95,19 +100,19 @@ const render = () => {
     let icon
     for(const i in game.notes){
         switch(game.notes[i][0]){
-        case "u":
+        case "up":
             icon = icons.up
             break
-        case "l":
+        case "left":
             icon = icons.left
             break
-        case "r":
+        case "right":
             icon = icons.right
             break
-        case "d":
+        case "down":
             icon = icons.down
             break
-        case "t":
+        case "tap":
             icon = icons.tap
             break
         }
